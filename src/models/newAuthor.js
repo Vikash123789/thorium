@@ -7,10 +7,11 @@ const authorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    age: Number,
-    address: String
+    address: String,
+    ratings :  Number
+    
 }, { timestamps: true });
 
-module.exports = mongoose.model('New_Author', authorSchema)
+module.exports = mongoose.model('BrandNewAuthor', authorSchema)
 
 

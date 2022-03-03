@@ -8,8 +8,9 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
     headQuarter: String,
+    
 
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('NewPublisher', bookSchema)
+module.exports = mongoose.model('BrandNewPublisher', bookSchema)
