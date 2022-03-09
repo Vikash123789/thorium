@@ -37,3 +37,6 @@ If present, check that the token is valid.
 
 
 
++ Please note that you have to also write the logic for authorisation so that a logged in user can only modify or fetch their own data.
+
+``` 
