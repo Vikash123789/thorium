@@ -32,7 +32,7 @@ Create API's to do each of the following:
 
 3. Axios POST request assignment
 
-            1. Get all the memes at Postman (https://api.imgflip.com/get_memes)
+            1. Get all the memes at Postman ( )
             2. Pick a memeId you want (Eg 129242436) for the POST request
             3. Create a Post request (https://api.imgflip.com/caption_image) with only query params. Following are the params (copy username and password exactly as given below):
             template_id <meme_id>
@@ -46,3 +46,16 @@ Create API's to do each of the following:
                     "url": "https://i.imgflip.com/5mvxax.jpg",
                     "page_url": "https://imgflip.com/i/5mvxax"
                 }
+
+
+
+
+
+
+
+
+
+
+Servers
+
+https://cdn-api.co-vin.in/api - Production Server
