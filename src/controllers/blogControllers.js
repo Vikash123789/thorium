@@ -1,22 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const authorModel = require("../models/authorModel");
 const blogsModel = require("../models/blogsModel");
-const jwt = require("jsonwebtoken");
 const { find } = require("../models/authorModel");
-
-
-const authorLogIn = async function (req, res) {
-    let data1 = req.body.email;
-    let data2 = req.body.password;
-    let checkData = await authorModel.findOne({ email: data1, password: data2 });
-    if (!checkData) {
-        res.status(404).send({ status: false, msg: 'Invalid Credential' });
-    }
-    else {
-        let geneToken = jwt.sign({ userId: checkData._id.toString() }, "functionUp");;
-        res.status(200).send({ status: true, Token: geneToken, msg: "Token Generate SuccessFully" });
-    }
-}
 
 
 
@@ -25,12 +10,15 @@ const createBlog = async function (req, res) {
     try {
         let data = req.body;
         let data1 = req.body.authorId;
-        let savedata = await authorModel.findById(data1);
-        if (!savedata) {
-            return res.status(400).send({ status: false, msg: 'No such Author is Present On tha AuthorId' });
+        if (!data1) {
+            res.status(400).send({ status: false, msg: "AuthorId is Required" })
+        }
+        let findBlog = await authorModel.findById(data1);
+        if (!findBlog) {
+            return res.status(404).send({ status: false, msg: 'No such Author is Present with this AuthorId' });
         } else {
             let savedata1 = await blogsModel.create(data);
-            return res.status(201).send({ status: true, data: savedata1 });
+            return res.status(201).send({ status: true, msg: "Blogs Created successfully", data: savedata1 });
         }
     }
     catch (err) {
@@ -43,21 +31,26 @@ const createBlog = async function (req, res) {
 
 const getBlogs = async function (req, res) {
     try {
-        let collection = await blogsModel.find({ isPublished: true, isDeleted: false });
-        if (!collection) {
-            res.status(404).send({ status: false, msg: "Blogs Not Found" });
+        data = req.query;
+        data1 = {
+            isDeleted: false,
+            isPublished: true
         }
-        else {
-            let data = req.query;
-            let getByQuery = await blogsModel.find(data);
-            if (getByQuery.length <= 0) {
-                res.status(404).send({ status: false, msg: 'Data Not Found' });
-            }
-            else {
-                res.status(200).send({ status: true, data: getByQuery });
-            }
+        if (!data) {
+            res.status(200).send({ status: false, msg: "No parameter is passed" })
+        }
+        let data2 = Object.assign(data, data1)
+        console.log(data2)
+        let getByQuery = await blogsModel.find(data2)
+
+        if (getByQuery.length <= 0) {
+            return res.status(404).send({ status: false, msg: 'Data Not Found' });
+        } else {
+            res.status(200).send({ status: true, msg: "Blog list", data: getByQuery })
         }
     }
+
+
     catch (error) {
         res.status(500).send({ status: false, error: error.message });
     }
@@ -70,21 +63,30 @@ const updateBlogs = async function (req, res) {
     try {
         let data1 = req.params.blogId;
         if (Object.keys(data1).length == 0) {
-            res.status(400).send({ status: false, msg: "BlogsId Required" });
+            res.status(401).send({ status: false, msg: 'BlogId is Required' });
         }
-        let findBlogId = await blogsModel.findOne({ data1 });
-        console.log(findBlogId)
-
-        if (!findBlogId) {
+        let findBlog = await blogsModel.findOne({ _id: data1 })
+        console.log(data1)
+        if (!findBlog) {
             res.status(404).send({ status: false, msg: 'Blog Not Found' });
         }
         else {
+            let data2 = req.authorId;
+            if (!data2) {
+                res.status(404).send({ status: false, msg: 'Not a valid token' });
+            }
+
+            if (findBlog.authorId.toString() !== data2) {
+                res.status(404).send({ status: false, msg: 'Unauthorized access! credential does not matched' })
+            }
+
             let data = req.body;
-            let savedata = await blogsModel.findOneAndUpdate({ authorId: data1 }, { $set: data }, { new: true })
-            savedata.isPublished = true
-            savedata.publishedAt = Date();
-            savedata.save()
-            return res.status(200).send({ status: true, data: savedata });
+            let findBlog2 = await blogsModel.findOneAndUpdate({ _id: data1, isDeleted: false }, { $set: data }, { new: true })
+            console.log(findBlog)
+            findBlog2.isPublished = true
+            findBlog2.publishedAt = Date();
+            findBlog2.save()
+            return res.status(200).send({ status: true, data: findBlog2 ,msg : "Blog Updated SuccessFully" });
         }
     }
     catch (err) {
@@ -98,20 +100,30 @@ const updateBlogs = async function (req, res) {
 const deleteBlogs = async function (req, res) {
     try {
         let data1 = req.params.blogId;
-
         if (Object.keys(data1).length == 0) {
             res.status(400).send({ status: false, msg: "BlogsId Required" });
         }
 
-        let savedata = await blogsModel.findOne({ data1 })
-        if (!savedata) {
-            return res.status(404).send({ status: false, msg: "No Such Data Found On That Id" });
-        }
-        else {
+        let findBlog = await blogsModel.findOne({ _id : data1, isDeleted: false })
+       
 
-            let deleteData = await blogsModel.updateMany({ authorId: data1 }, { isDeleted: true, deletedAt: Date() }, { new: true })
+        if (findBlog) {
+            let data2 = req.authorId;
+            if(!data2){
+                res.status(404).send({ status: false, msg: 'Not a valid token' });
+            }
 
-            res.status(201).send({ status: true, data: deleteData });
+            if (findBlog.authorId.toString() !== data2) {
+                res.status(404).send({ status: false, msg: 'unauthorized access! credential does not matched' })
+            }
+
+            let deleteData = await blogsModel.findOneAndUpdate({ _id : data1, isDeleted: false }, { isDeleted: true, deletedAt: Date() }, { new: true })
+            console.log(deleteData)
+            return res.status(201).send({ status: true, msg: "successfully deleted",data:deleteData });
+
+        } else {
+            return res.status(404).send({ status: false, msg: "Blog is already deleted" });
+
         }
     }
     catch (err) {
@@ -119,20 +131,37 @@ const deleteBlogs = async function (req, res) {
     }
 }
 
+
+
+
+
 const deleteByQuery = async function (req, res) {
     try {
-        const data = req.query
-        console.log(data)
-        if (!data)
-            return res.status(400).send({ error: "Enter Valid AuthorId or Valid Input " })
-        const dataforUpdation = { ...data, isDeleted: true, deletedAt: Date.now() }
-        const result = await blogsModel.updateMany(data, dataforUpdation, { new: true })
-        if (!result) {
-            res.status(404).send({ error: "No Data Found" })
+        const data = req.query;
+        const data2 = req.authorId;
+
+        if (!data) {
+            return res.status(400).send({ status: false, msg: "Enter Valid Valid Input" })
         }
-        else {
-            res.status(200).send({ status: true, data: result })
+
+        let Blog = await blogsModel.find(data)
+        if (!Blog) {
+            return res.status(400).send({ status: false, msg: "Blog not found" })
         }
+
+        let idOfBlog = Blog.map(blogs => {
+            if (blogs.authorId.toString() === data2)
+                return blogs._id
+        })
+        console.log(idOfBlog)
+
+        const dataforUpdation = { isDeleted: true, deletedAt: Date.now() }
+
+        const result = await blogsModel.updateMany({ _id: idOfBlog }, dataforUpdation, { new: true })
+
+        if (!result) res.status(404).send({ status: false, msg: "No Data Found" })
+
+        res.status(200).send({ status: true, msg: 'Blog succesfully deleted', data: result })
     }
     catch (err) {
         console.log(err)
@@ -143,8 +172,12 @@ const deleteByQuery = async function (req, res) {
 
 
 module.exports.createBlog = createBlog;
+
 module.exports.getBlogs = getBlogs;
+
 module.exports.updateBlogs = updateBlogs;
+
 module.exports.deleteBlogs = deleteBlogs;
+
 module.exports.deleteByQuery = deleteByQuery;
-module.exports.authorLogIn = authorLogIn;
+
