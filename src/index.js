@@ -11,14 +11,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoose = require('mongoose')
 
-mongoose.connect("", {useNewUrlParser: true})
-    .then(() => console.log('mongodb running on 27017'))
+mongoose.connect("mongodb+srv://functionup-cohort:G0Loxqc9wFEGyEeJ@cluster0.rzotr.mongodb.net/Vikash123-DB?retryWrites=true&w=majority", { useNewUrlParser: true })
+    .then(() => console.log('WelCome to College Internship Site'))
     .catch(err => console.log(err))
 
-app.use('/functionup', route);
 
-app.listen(process.env.PORT || 3000, function() {
-	console.log('Express app running on port ' + (process.env.PORT || 3000))
+
+
+app.use('/', route);
+
+
+ 
+
+app.listen(process.env.PORT || 3000, function () {
+    console.log('Express app running on port ' + (process.env.PORT || 3000))
 });
 
 
