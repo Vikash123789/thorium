@@ -20,9 +20,10 @@ const registerUser= async (req,res)=>{
             if(emailExt){ return res.status(400).send({msg :"already exist email"})}
 
             if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-              return res.status(404).send({ status: false, message: "Enter  valid email address " });}
+              return res.status(400).send({ status: false, message: "Enter  valid email address " });}
 
-              if (!/^(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/.test(phone)) {
+             // if (!/^[6-9]\d(\()?\d{3}(\))?(|\s)?\d{3}(|\s)\d{4}$/.test(phone)) {
+                if (!/^[6-9]\d{9}$/.test(phone)) {
               return res.status(404).send({ status: false, message: "Enter  valid mobile number " });}
 
             const phoneExt = await userModel.findOne({phone:data.phone})
@@ -52,8 +53,7 @@ const loginUser= async (req,res)=>{
         if(!validation.valid(password)){ return res.status(400).send({status:false,msg:"Insert Password"})}
 
         const findUser = await userModel.findOne({email:email,password:password})
-
-        if(Object.keys(findUser)==0){ return res.status(404).send({status:false,msg:"No user found"})}
+        if(Object.keys(findUser)===0){ return res.status(404).send({status:false,msg:"No user found"})}
 
          const token = jwt.sign({ 
             userId: findUser._id,
@@ -67,7 +67,7 @@ const loginUser= async (req,res)=>{
     }
     catch(err){
         console.log(err)
-        return res.status.send({status:false,msg:err})
+        return res.status(500).send({status:false,msg:err})
     }
 }
 
