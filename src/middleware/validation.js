@@ -28,7 +28,7 @@ const isValidObjectId = function (ObjectId) {
  }
 
 const isValidIsbn = function(isbn){
-  return (/^(\()?\d{3}(\))?(-|\s)?\d{9}$/.test(ISBN))
+  return (/^(\()?\d{3}(\))?(-|\s)?\d{9}$/.test(isbn))
 }
 
   

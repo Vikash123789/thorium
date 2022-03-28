@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
         try{
         let token = req.headers["x-api-key"]
         if(token){
-            let decodedToken = jwt.verify(token , "Project-One" )      
+            let decodedToken = jwt.verify(token , "Project-Three" )      
             if(decodedToken){
 
            req.decodedToken = decodedToken

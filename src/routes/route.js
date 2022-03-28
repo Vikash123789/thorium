@@ -8,7 +8,7 @@ const reviewController =  require("../controllers/reviewController")
 
 
 router.post("/register",userController.registerUser)
-router.get("/login",userController.loginUser)
+router.post("/login",userController.loginUser)
 
 
 router.post("/books",auth.auth,bookController.createBooks)
@@ -16,7 +16,7 @@ router.post("/books",auth.auth,bookController.createBooks)
  router.get("/books",auth.auth,bookController.getBooks)
  router.get("/books/:bookId",auth.auth,bookController.getById)
  router.put("/books/:bookId",auth.auth,bookController.updateBooks)
-// router.delete("/books/:bookId",bookController.deleteBooks)
+ router.delete("/books/:bookId",auth.auth,bookController.deleteBooks)
 // router.post("/books/:bookId/review",reviewController.createReview)
 // router.put("/books/:bookId/review/:reviewId",reviewController.updateReview)
 // router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)

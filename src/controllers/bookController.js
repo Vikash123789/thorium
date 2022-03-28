@@ -30,7 +30,7 @@ const createBooks = async (req, res) => {
 
     if (!validation.valid(ISBN)) { return res.status(400).send({ status: false, msg: " No ISBN provided by user", }) }
     if (! validation.isValidIsbn(ISBN)) {
-      return res.status(404).send({ status: false, message: "Enter  valid ISBN number " });
+      return res.status(400).send({ status: false, message: "Enter  valid ISBN number " });
     }
     const existISBN = await bookModel.findOne({ ISBN: ISBN })
     if (existISBN) { return res.status(400).send({ status: false, msg: " ISBN already exist", }) }
@@ -102,7 +102,7 @@ const getById = async (req, res) => {
 
     const findId = await bookModel.findById( data)
     if(!findId){ return res.status(404).send({status:false,msg :"No book exist with this Book id"})}
-    if (findId.isDeleted == true){ return res.status(404).send({status:false,msg :"already deleted"})}
+    if (findId.isDeleted == true){ return res.status(400).send({status:false,msg :"already deleted"})}
 
    
   //  let reviews = await reviewModel.find({bookId:data})
@@ -122,7 +122,7 @@ const getById = async (req, res) => {
 const updateBooks = async (req, res) => {
   try {
     const data = req.params.bookId;
-    console.log(req.body)
+    
 
     if (Object.keys(req.body) == 0 || req.body == null) { return res.status(400).send({ Status: false, msg: "Please provide input" }) }
    
@@ -159,7 +159,7 @@ const updateBooks = async (req, res) => {
 
         filter["releasedAt"] = releasedAt
       }
-
+console.log(filter)
 
 
       const updateData = await bookModel.findOneAndUpdate({ _id: data }, {
@@ -171,7 +171,7 @@ const updateBooks = async (req, res) => {
 
     } else { return res.status(403).send({ Status: false, msg: "The user is not authorized to update the requested book" }) }
 
-  } catch (err) { console.log(err); return res.status(500).send({ status: false, msg: err, }); }
+  } catch (err) { console.log(err); return res.status(500).send({ status: false, msg: err.message }); }
 };
 
 
