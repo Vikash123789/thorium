@@ -9,27 +9,27 @@ const reviewModel = new mongoose.Schema({
     },
     reviewedBy: {
         type: String,
-        required: true,
+       
         default: "Guest",
-       // value: {type: String },
-    }, //reviewer's name},
+       
+    }, 
     reviewedAt: {
         type: Date,
         required: true
     },
     rating: {
         type: Number,
-        min: 1,
-        max: 5,
+       
         required: true
     },
     review: {
-        type: String
+        type: String,
+        required:true
     },
     isDeleted: {
         type: Boolean,
         default: false
     },
-});
+},{timestamps:true});
 
 module.exports = new mongoose.model("reviewData", reviewModel);

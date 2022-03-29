@@ -31,6 +31,11 @@ const isValidIsbn = function(isbn){
   return (/^(\()?\d{3}(\))?(-|\s)?\d{9}$/.test(isbn))
 }
 
+const isValidRating = function(rating){
+  if (typeof (rating)== 'number' && rating==1||rating==2||rating==3||rating==4||rating==5)return true
+  return false
+}
+
   
 
 
@@ -42,3 +47,4 @@ module.exports.isValidEmail=isValidEmail;
 module.exports.isValidPhone=isValidPhone
 module.exports.isValidDateFormat=isValidDateFormat;
 module.exports.isValidIsbn=isValidIsbn
+module.exports.isValidRating=isValidRating

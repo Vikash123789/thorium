@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId;
-const userModel = require("../models/userModel")
-const moment = require("moment")
+
 
 const bookModel = new mongoose.Schema({
     title: {
@@ -50,6 +49,6 @@ const bookModel = new mongoose.Schema({
       required: true,
 
     }, //format("YYYY-MM-DD")},
-});
+},{timestamps:true});
 
 module.exports = mongoose.model("bookmdata", bookModel);

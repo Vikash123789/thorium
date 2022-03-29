@@ -2,6 +2,7 @@
 const userModel = require("../models/userModel.js");
 const validation = require("../middleware/validation");
 const bookModel = require("../models/bookModel");
+const reviewModel = require("../models/reviewModel")
 
 
 
@@ -10,7 +11,7 @@ const bookModel = require("../models/bookModel");
 const createBooks = async (req, res) => {
   try {
     const data = req.body;
-    if (Object.keys(data) == 0) { return res.status(400).send({ status: false, msg: "No input provided by user", }); }
+    if (Object.keys(data) == 0 || data == null){ return res.status(400).send({ status: false, msg: "No input provided by user", }); }
     const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
     
     
@@ -96,37 +97,38 @@ const getBooks = async (req, res) => {
 //Get Books By Id
 const getById = async (req, res) => {
   try {
-    const data = req.params.bookId;
+    const id = req.params.bookId;
     
-    if (!validation.isValidObjectId(data)){return res.status(400).send({status: false,msg: "Enter valid Book id",})}
+    if (!validation.isValidObjectId(id)){return res.status(400).send({status: false,msg: "Enter valid Book id",})}
 
-    const findId = await bookModel.findById( data)
+    const findId = await bookModel.findById( id)
     if(!findId){ return res.status(404).send({status:false,msg :"No book exist with this Book id"})}
     if (findId.isDeleted == true){ return res.status(400).send({status:false,msg :"already deleted"})}
 
    
-  //  let reviews = await reviewModel.find({bookId:data})
-  //  if(reviews.length>0){ findId['reviews']=reviews}
+   let reviews = await reviewModel.find({bookId:id})
+  
    
-   
+   findId._doc['reviews']=reviews
    
    
     return res.status(200).send({status : true, msg :"Data list",Data :findId})
 
 
-  } catch (err) {console.log(err);return res.status(500).send({status: false,msg: err,});}
+  } catch (err) {console.log(err);return res.status(500).send({status: false,msg:err.message,});}
 };
 
 
 //Update Books
 const updateBooks = async (req, res) => {
   try {
-    const data = req.params.bookId;
+    const id = req.params.bookId;
+    if(!validation.isValidObjectId(id)){return res.status(400).send({Status:false, msg:"Please enter valid id"})}
     
 
     if (Object.keys(req.body) == 0 || req.body == null) { return res.status(400).send({ Status: false, msg: "Please provide input" }) }
    
-    const findId = await bookModel.findById(data)
+    const findId = await bookModel.findById(id)
     if (!findId) { return res.status(404).send({ status: false, msg: "No book with the given id exists", }) }
     if (findId.isDeleted == true) { return res.status(400).send({ Status: false, msg: "The requested book has been deleted" }) }
 
