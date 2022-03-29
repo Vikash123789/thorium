@@ -101,7 +101,7 @@ const getById = async (req, res) => {
     
     if (!validation.isValidObjectId(id)){return res.status(400).send({status: false,msg: "Enter valid Book id",})}
 
-    const findId = await bookModel.findById( id)
+    const findId = await bookModel.findById( id).lean()
     if(!findId){ return res.status(404).send({status:false,msg :"No book exist with this Book id"})}
     if (findId.isDeleted == true){ return res.status(400).send({status:false,msg :"already deleted"})}
 
@@ -109,7 +109,7 @@ const getById = async (req, res) => {
    let reviews = await reviewModel.find({bookId:id})
   
    
-   findId._doc['reviews']=reviews
+   findId['reviews']=reviews
    
    
     return res.status(200).send({status : true, msg :"Data list",Data :findId})
