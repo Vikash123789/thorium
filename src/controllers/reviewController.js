@@ -51,7 +51,7 @@ const createReview = async (req, res) => {
       if (!validation.isValidObjectId(reviewId)) { return res.status(400).send({ status: false, message: "input valid reviewid" }) }
       const data = req.body;
       if (Object.keys(data) == 0) { return res.status(400).send({status: false, message: "No input provided by user",});}
-
+      const {reviewedBy , review , rating}=data
     const bookDetails = await bookModel.findById(bookId)
     if(!bookDetails) return res.status(400).send({status: false,message:"No book with this id exists"})
     if(bookDetails.isDeleted==true){return res.status(400).send({Status:false, message:"Thebook has been deleted"})}
@@ -61,8 +61,14 @@ const createReview = async (req, res) => {
     if(!reviewDetails){return res.status(400).send({Status:true , message:"No review with this review id exists"})}
     if(reviewDetails.isDeleted==true){return res.status(400).send({Status:false , msg:"The requested review has been deleted"})}
     
+    let update = {reviewedAt:Date.now()}
+     if(validation.valid(review)) {update['review']=review }
+     if(validation.valid(reviewedBy)) {update['reviewedBy']=reviewedBy}
+     if(validation.isValidObjectId(rating)){update['rating']=rating}
+
+
     if(bookDetails._id!=reviewId){return res.status(400).send({Status:false , msg:"The review and book do not match"})}
-      const saveData = await reviewModel.findOneAndUpdate({_id:reviewId},{data, reviewedAt: Date.now()})
+      const saveData = await reviewModel.findOneAndUpdate({_id:reviewId},{$set:update},{new:true})
       return res.status(201).send({status :true , msg :saveData})
     
     } catch (err) {console.log(err);return res.status(500).send({status: false,msg:err.message});}
