@@ -36,7 +36,7 @@ const createReview = async (req, res) => {
     reviewCount['reviewsData']=totalReviews
 
 
-    return res.status(201).send({ Staus: true, msg: "Successfuly created review", Data: totalReviews })
+    return res.status(201).send({ Staus: true, msg: "Successfuly created review", Data: reviewCount })
 
 
 
@@ -77,12 +77,12 @@ const updateReview = async (req, res) => {
     
     const saveData = await reviewModel.findOneAndUpdate({ _id: reviewId }, { $set: update })
      const reviewData = await reviewModel.find({bookId:bookId, isDeleted:false})
-     book['reviewsData']=reviewData
+     bookDetails['reviewsData']=reviewData
 
     
     
     
-    return res.status(200).send({ status: true, msg:`Review with id ${reviewId} updated sucessfuly` , Data:book})
+    return res.status(200).send({ status: true, msg:`Review with id ${reviewId} updated sucessfuly` , Data:bookDetails})
 
   } catch (err) { console.log(err); return res.status(500).send({ status: false, msg: err.message }); }
 };

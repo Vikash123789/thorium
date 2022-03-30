@@ -10,6 +10,8 @@ const reviewModel = require("../models/reviewModel")
 //Create books
 const createBooks = async (req, res) => {
   try {
+    console.log(req)
+    
     const data = req.body;
     
     if (Object.keys(data).length == 0 || data == null){ return res.status(400).send({ status: false, msg: "No input provided by user", }); }
@@ -80,12 +82,14 @@ const getBooks = async (req, res) => {
     if (validation.valid(category)) {
       filter['category'] = category
     }
+  
     if (validation.valid(subcategory)) {
       filter['subcategory'] = subcategory
     }
+    
 
 
-    const findData = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
+    const findData = await bookModel.find(filter).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({title:1})
     if (findData.length == 0) { return res.status(404).send({ Status: false, msg: "No books with the respected query were found" }) }
 
     return res.status(200).send({ Status: true, msg: "Book List", Data: findData })
@@ -107,7 +111,7 @@ const getById = async (req, res) => {
     if (findId.isDeleted == true){ return res.status(400).send({status:false,msg :"already deleted"})}
 
    
-   let reviews = await reviewModel.find({bookId:id})
+   let reviews = await reviewModel.find({bookId:id , isDeleted:false})
   
    
    findId['reviewsData']=reviews
@@ -165,7 +169,7 @@ const updateBooks = async (req, res) => {
 console.log(filter)
 
 
-      const updateData = await bookModel.findOneAndUpdate({ _id: data }, {
+      const updateData = await bookModel.findOneAndUpdate({ _id: id}, {
         $set: filter
       }, { new: true })
 
@@ -183,7 +187,9 @@ const deleteBooks = async (req, res) => {
 
   try {
     let id = req.params.bookId
+    if(!validation.isValidObjectId(id)){return res.status(400).send({Status:false, msg:"Please enter a valid id"})}
     let book = await bookModel.findById(id)
+    
     if (!book) { return res.status(404).send({ Status: false, msg: "No book found" }) }
     if (book.isDeleted === true) { return res.status(400).send({ Status: false, msg: "The requeste book has alredy been deleteed" }) }
     if (book.userId == req.decodedToken.userId) {

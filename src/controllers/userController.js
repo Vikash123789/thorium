@@ -61,7 +61,7 @@ const loginUser = async (req, res) => {
         if (!validation.valid(password)) { return res.status(400).send({ status: false, msg: "Insert Password" }) }
 
         const findUser = await userModel.findOne({ email: email, password: password })
-        if (!findUser) { return res.status(404).send({ status: false, msg: "No user found" }) }
+        if (!findUser) { return res.status(404).send({ status: false, msg: "No user with this email or password was found found" }) }
 
         const token = jwt.sign({
             userId: findUser._id,
