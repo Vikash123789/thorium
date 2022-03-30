@@ -7,29 +7,35 @@ const bookModel = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        trim:true
         
     },
     excerpt: {
         type :String,
-        required: true
+        required: true,
+        trim:true
     },
     userId: {
         type: ObjectId,
         required: true,
-        ref: "usermbook"
-    }, //refs to user model},
+        ref: "usermbook",
+        trim:true
+    }, 
     ISBN: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim:true
     },
     category: {
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
     subcategory: {
         type: String,
-        required: true
+        required: true,
+        trim:true
     },
     reviews: {
         type: Number,
