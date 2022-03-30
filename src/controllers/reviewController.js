@@ -36,7 +36,7 @@ const createReview = async (req, res) => {
     reviewCount['reviewsData']=totalReviews
 
 
-    return res.status(202).send({ Staus: true, msg: "Successfuly added review", Data: totalReviews })
+    return res.status(201).send({ Staus: true, msg: "Successfuly created review", Data: totalReviews })
 
 
 
@@ -82,7 +82,7 @@ const updateReview = async (req, res) => {
     
     
     
-    return res.status(201).send({ status: true, msg:`Review with id ${reviewId} updated sucessfuly` , Data:book})
+    return res.status(200).send({ status: true, msg:`Review with id ${reviewId} updated sucessfuly` , Data:book})
 
   } catch (err) { console.log(err); return res.status(500).send({ status: false, msg: err.message }); }
 };

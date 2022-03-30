@@ -169,7 +169,7 @@ console.log(filter)
         $set: filter
       }, { new: true })
 
-      return res.status(201).send({ status: true, msg: updateData })
+      return res.status(200).send({ status: true, msg: updateData })
 
 
     } else { return res.status(403).send({ Status: false, msg: "The user is not authorized to update the requested book" }) }
