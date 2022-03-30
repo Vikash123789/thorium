@@ -67,7 +67,7 @@ const updateReview = async (req, res) => {
     if (!reviewDetails) { return res.status(404).send({ Status: true, message: "No review with this review id exists" }) }
     if (reviewDetails.isDeleted == true) { return res.status(400).send({ Status: false, msg: "The requested review has been deleted" }) }
 
-    let update = { reviewedAt: Date.now() }
+    let update = {}
     if (validation.valid(review)) { update['review'] = review }
     if (validation.valid(reviewedBy)) { update['reviewedBy'] = reviewedBy }
     if (validation.isValidRating(rating)) { update['rating'] = rating }
