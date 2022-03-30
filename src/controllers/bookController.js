@@ -118,12 +118,12 @@ const getBooks = async (req, res) => {
     }
 
     if (validation.valid(category)) {
-      filter['category'] = category
+      filter['category'] = category.toLowerCase()
     }
 
 
     if (validation.valid(subcategory)) {
-      filter['subcategory'] = subcategory
+      filter['subcategory'] = subcategory.toLowerCase()
     }
 
 
@@ -135,7 +135,7 @@ const getBooks = async (req, res) => {
 
     return res.status(200).send({ Status: true, msg: "Book List", Data: findData })
 
-  } catch (err) { return res.status(500).send({ status: false, msg: err, }); }
+  } catch (err) { return res.status(500).send({ status: false, msg: err.message, }); }
 };
 
 
