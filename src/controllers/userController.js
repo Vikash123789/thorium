@@ -8,7 +8,7 @@ const validation = require("../middleware/validation")
 const registerUser = async (req, res) => {
     try {
         let data = req.body;
-        if (Object.keys(data) == 0) {
+        if (Object.keys(data).length == 0) {
             return res.status(400).send({ status: false, msg: "No input" })
         }
         const { title, name, phone, email, password } = data;
@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
     try {
         Data = req.body
 
-        if (Object.keys(Data) == 0) { return res.status(400).send({ status: false, msg: "Please provide the input" }) }
+        if (Object.keys(Data).length == 0) { return res.status(400).send({ status: false, msg: "Please provide the input" }) }
         const { email, password } = Data;
 
 

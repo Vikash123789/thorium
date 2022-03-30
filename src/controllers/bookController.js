@@ -11,7 +11,8 @@ const reviewModel = require("../models/reviewModel")
 const createBooks = async (req, res) => {
   try {
     const data = req.body;
-    if (Object.keys(data) == 0 || data == null){ return res.status(400).send({ status: false, msg: "No input provided by user", }); }
+    
+    if (Object.keys(data).length == 0 || data == null){ return res.status(400).send({ status: false, msg: "No input provided by user", }); }
     const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
     
     
@@ -109,7 +110,7 @@ const getById = async (req, res) => {
    let reviews = await reviewModel.find({bookId:id})
   
    
-   findId['reviews']=reviews
+   findId['reviewsData']=reviews
    
    
     return res.status(200).send({status : true, msg :"Data list",Data :findId})
@@ -126,7 +127,7 @@ const updateBooks = async (req, res) => {
     if(!validation.isValidObjectId(id)){return res.status(400).send({Status:false, msg:"Please enter valid id"})}
     
 
-    if (Object.keys(req.body) == 0 || req.body == null) { return res.status(400).send({ Status: false, msg: "Please provide input" }) }
+    if (Object.keys(req.body).length == 0 || req.body == null) { return res.status(400).send({ Status: false, msg: "Please provide input" }) }
    
     const findId = await bookModel.findById(id)
     if (!findId) { return res.status(404).send({ status: false, msg: "No book with the given id exists", }) }
@@ -194,6 +195,7 @@ const deleteBooks = async (req, res) => {
 
 
   } catch (err) { return res.status(500).send({ Status: false, msg: err.message }) }
+  //if we delte a book therefor there review should also be deleted
 
 
 

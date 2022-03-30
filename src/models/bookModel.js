@@ -32,14 +32,16 @@ const bookModel = new mongoose.Schema({
         required: true
     },
     reviews: {
-        tyep: Number,
-        default: 0,
-       // comment: []
-    }, // comment: Holds number of reviews of this book},
+        type: Number,
+        default:0,
+        required:true
+        
+       
+    }, 
     deletedAt: {
         type: Date,
         default: ""
-    }, //when the document is deleted},
+    },
     isDeleted: {
         type: Boolean,
         default: false
@@ -48,7 +50,7 @@ const bookModel = new mongoose.Schema({
         type: Date,
       required: true,
 
-    }, //format("YYYY-MM-DD")},
+    }, 
 },{timestamps:true});
 
 module.exports = mongoose.model("bookmdata", bookModel);
