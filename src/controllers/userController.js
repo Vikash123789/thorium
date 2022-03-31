@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
 
        
 if (! validation.isValidTitle(title)) {
-            return res.status(400).send({ Satus: false, msg: "Title can only be Mr , Misses and Miss" })
+            return res.status(400).send({ Satus: false, msg: "Title can only be Mr , Mrs and Miss" })
         }
 
         if (!validation.valid(name)) {
