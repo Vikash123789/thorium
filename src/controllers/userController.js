@@ -16,7 +16,10 @@ const registerUser = async (req, res) => {
             return res.status(400).send({ status: false, msg: "No title provided by user" })
         }
 
-        if (title != "Mr" && "Misses" && "Miss") {
+
+
+       
+if (! validation.isValidTitle(title)) {
             return res.status(400).send({ Satus: false, msg: "Title can only be Mr , Misses and Miss" })
         }
 
@@ -53,7 +56,7 @@ const registerUser = async (req, res) => {
             return res.status(400).send({ status: false, msg: "No password provided by user" })
         }
         if (password.length < 8 || password.length > 15) {
-            return res.status(400).send({ msg: "Password minimum length is 5 and maximum length is 15" })
+            return res.status(400).send({ msg: "Password minimum length is 8 and maximum length is 15" })
         }
 
 

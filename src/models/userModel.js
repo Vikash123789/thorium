@@ -37,7 +37,7 @@ const userModel = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: [8, "Input more than 5 charachter"],
+        minlength: [8, "Input more than 8 charachter"],
         maxlength: [15, "Enter less than 15 characters"],
         trim:true
     },

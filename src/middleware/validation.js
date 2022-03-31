@@ -36,6 +36,13 @@ const isValidRating = function(rating){
   return false
 }
 
+const isValidTitle = function(x){
+  
+   if( x == 'Mr'|| x=='Misses'|| x=='Miss'){return true}
+   return false
+    
+}
+
   
 
 
@@ -46,5 +53,6 @@ module.exports.isValidObjectId = isValidObjectId
 module.exports.isValidEmail=isValidEmail;
 module.exports.isValidPhone=isValidPhone
 module.exports.isValidDateFormat=isValidDateFormat;
-module.exports.isValidIsbn=isValidIsbn
-module.exports.isValidRating=isValidRating
+module.exports.isValidIsbn=isValidIsbn;
+module.exports.isValidRating=isValidRating;
+module.exports.isValidTitle=isValidTitle;
