@@ -52,7 +52,7 @@ const registerUser = async (req, res) => {
         if (!validation.valid(password)) {
             return res.status(400).send({ status: false, msg: "No password provided by user" })
         }
-        if (password.length < 5 || password.length > 15) {
+        if (password.length < 8 || password.length > 15) {
             return res.status(400).send({ msg: "Password minimum length is 5 and maximum length is 15" })
         }
 
