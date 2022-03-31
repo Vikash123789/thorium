@@ -95,7 +95,7 @@ const createBooks = async (req, res) => {
 
   } catch (err) {
 
-    return res.status(500).send({ status: false, msg: err, });
+    return res.status(500).send({ status: false, msg: err.message });
   }
 };
 
@@ -236,7 +236,7 @@ const updateBooks = async (req, res) => {
 
     } else { return res.status(403).send({ Status: false, msg: "The user is not authorized to update the requested book" }) }
 
-  } catch (err) { console.log(err); return res.status(500).send({ status: false, msg: err.message }); }
+  } catch (err) { return res.status(500).send({ status: false, msg: err.message }); }
 };
 
 
