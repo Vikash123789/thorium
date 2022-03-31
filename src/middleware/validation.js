@@ -38,7 +38,7 @@ const isValidRating = function(rating){
 
 const isValidTitle = function(x){
   
-   if( x == 'Mr'|| x=='Misses'|| x=='Miss'){return true}
+   if( x == 'Mr'|| x=='Mrs'|| x=='Miss'){return true}
    return false
     
 }
