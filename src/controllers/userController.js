@@ -37,7 +37,7 @@ if (! validation.isValidTitle(title)) {
 
         const phoneExt = await userModel.findOne({ phone: data.phone })
         if (phoneExt) {
-            return res.status(400).send({ msg: "phone allready exists" })
+            return res.status(400).send({ msg: "phone Number already exists" })
         }
 
 

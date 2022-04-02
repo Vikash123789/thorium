@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 const userController = require("../controllers/userController.js");
 const bookController = require("../controllers/bookController");
 const reviewController = require("../controllers/reviewController");
+const awsController = require("../controllers/aws.js");
 
 router.post("/register", userController.registerUser);
 router.post("/login", userController.loginUser);
@@ -19,4 +20,7 @@ router.post("/books/:bookId/review", reviewController.createReview);
 router.put("/books/:bookId/review/:reviewId", reviewController.updateReview);
 router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview);
 
+
+
+router.post("/write-file-aws",awsController.awsLinkCreator)
 module.exports = router;

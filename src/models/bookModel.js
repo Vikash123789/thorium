@@ -7,45 +7,50 @@ const bookModel = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        trim:true
-        
+        trim: true
+
+    },
+    bookCover: {
+        type: String,
+        required: true,
+        default : "Book Cover Not Availabe in that Time"
     },
     excerpt: {
-        type :String,
+        type: String,
         required: true,
-        trim:true
+        trim: true
     },
     userId: {
         type: ObjectId,
         required: true,
-        ref: "usermbook",
-        trim:true
-    }, 
+        ref: "userbook",
+        trim: true
+    },
     ISBN: {
         type: String,
         required: true,
         unique: true,
-        trim:true
+        trim: true
     },
     category: {
         type: String,
         required: true,
-        trim:true,
-        lowercase:true
+        trim: true,
+        lowercase: true
     },
     subcategory: {
         type: String,
         required: true,
-        trim:true,
-        lowercase:true
+        trim: true,
+        lowercase: true
     },
     reviews: {
         type: Number,
-        default:0,
-        required:true
-        
-       
-    }, 
+        default: 0,
+        required: true
+
+
+    },
     deletedAt: {
         type: Date,
         default: ""
@@ -56,9 +61,9 @@ const bookModel = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-      required: true,
+        required: true,
 
-    }, 
-},{timestamps:true});
+    },
+}, { timestamps: true });
 
 module.exports = mongoose.model("Book", bookModel);
